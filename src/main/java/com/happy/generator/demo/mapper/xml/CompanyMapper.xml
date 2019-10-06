@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.happy.generator.demo.mapper.CompanyMapper">
+
+  <!-- 通用查询映射结果 -->
+  <resultMap id="BaseResultMap" type="com.happy.generator.demo.entity.CompanyDO">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="representative" property="representative" />
+    <result column="address" property="address" />
+    <result column="region" property="region" />
+    <result column="city" property="city" />
+    <result column="district" property="district" />
+    <result column="lat_long" property="latLong" />
+    <result column="biz_status" property="bizStatus" />
+    <result column="credit_code" property="creditCode" />
+    <result column="register_code" property="registerCode" />
+    <result column="phone" property="phone" />
+    <result column="email" property="email" />
+    <result column="setup_time" property="setupTime" />
+    <result column="industry" property="industry" />
+    <result column="biz_scope" property="bizScope" />
+    <result column="company_type" property="companyType" />
+    <result column="registered_capital" property="registeredCapital" />
+    <result column="actual_capital" property="actualCapital" />
+    <result column="taxpayer_code" property="taxpayerCode" />
+    <result column="organization_code" property="organizationCode" />
+    <result column="english_name" property="englishName" />
+    <result column="authorization" property="authorization" />
+    <result column="homepage" property="homepage" />
+    <result column="used_name" property="usedName" />
+    <result column="search_key" property="searchKey" />
+    <result column="create_at" property="createAt" />
+    <result column="modify_at" property="modifyAt" />
+  </resultMap>
+
+  <!-- 通用查询结果列 -->
+  <sql id="Base_Column_List">
+      `id`,
+      `name`,
+      `representative`,
+      `address`,
+      `region`,
+      `city`,
+      `district`,
+      `lat_long`,
+      `biz_status`,
+      `credit_code`,
+      `register_code`,
+      `phone`,
+      `email`,
+      `setup_time`,
+      `industry`,
+      `biz_scope`,
+      `company_type`,
+      `registered_capital`,
+      `actual_capital`,
+      `taxpayer_code`,
+      `organization_code`,
+      `english_name`,
+      `authorization`,
+      `homepage`,
+      `used_name`,
+      `search_key`,
+      `create_at`,
+      `modify_at`,
+  </sql>
+</mapper>
