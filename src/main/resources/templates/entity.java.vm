@@ -110,15 +110,19 @@ public class ${entity} implements Serializable {
 #if(!${entityLombokModel})
     @Override
     public String toString() {
-        return "${entity}{" +
+        StringBuilder model = new StringBuilder(this.getClass().getSimpleName());
+        model.append("{")
     #foreach($field in ${table.fields})
         #if($!{foreach.index}==0)
-            "${field.propertyName}=" + ${field.propertyName} +
+                .append(${field.propertyName}).append("=").append(${field.propertyName})
         #else
-            ", ${field.propertyName}=" + ${field.propertyName} +
+                .append(", ")
+                .append(${field.propertyName}).append("=").append(${field.propertyName})
         #end
     #end
-            "}";
+                .append("}");
+
+        return model;
     }
 #end
 }

@@ -60,14 +60,15 @@ public class MpgGenerator {
     DataSourceConfig dataSourceConfig = new DataSourceConfig()
         .setDbType(DbType.MYSQL)
         .setUrl(datasource.getUrl())
-        .setDriverName("com.mysql.jdbc.Driver")
+        .setDriverName("com.mysql.cj.jdbc.Driver")
         .setUsername(datasource.getUsername())
         .setPassword(datasource.getPassword());
 
     // 生成策略配置
     StrategyConfig strategyConfig = new StrategyConfig()
         .setNaming(NamingStrategy.underline_to_camel)
-        .setRestControllerStyle(true);
+        .setRestControllerStyle(true)
+        .setEntityBuilderModel(true);
 
     // package配置
     PackageConfig packageConfig = new PackageConfig()
@@ -91,7 +92,7 @@ public class MpgGenerator {
         tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));
 
     // 生成器
-    new AutoGenerator().setConfig(configBuilder).execute();
+    (new AutoGenerator()).setConfig(configBuilder).execute();
 
   }
 }
