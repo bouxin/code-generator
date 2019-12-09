@@ -1,4 +1,4 @@
-# auto-mpg
+# Code Generator
 
 框架代码生成器
 ----------
