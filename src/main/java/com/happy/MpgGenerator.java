@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class MpgGenerator {
 
-  private static Logger log = Logger.getAnonymousLogger();
+  private static final Logger log = Logger.getAnonymousLogger();
 
   public static void main(String[] args) {
     Properties properties = new Properties();
@@ -36,6 +36,7 @@ public class MpgGenerator {
     dataSource.setUrl(properties.getProperty("datasource.url"));
     dataSource.setUsername(properties.getProperty("datasource.username"));
     dataSource.setPassword(properties.getProperty("datasource.password"));
+    dataSource.setDriverName(properties.getProperty("datasource.driver"));
 
     String outputDir = properties.getProperty("output.dir");
     String author = properties.getProperty("author");
@@ -44,25 +45,25 @@ public class MpgGenerator {
     generator(dataSource, author, outputDir, parentPath);
   }
 
-  private static void generator(DataSourceConfig datasource, String author, String outputDir,
-      String parentPath) {
+  private static void generator(DataSourceConfig datasource, String author,
+                                String outputDir, String parentPath) {
     // 生成器全局配置
     GlobalConfig globalConfig = new GlobalConfig();
 
     globalConfig.setOpen(false);
-    globalConfig.setAuthor(author);
-    globalConfig.setOutputDir(outputDir);
     globalConfig.setBaseResultMap(true);
     globalConfig.setBaseColumnList(true);
     globalConfig.setFileOverride(true);
+    globalConfig.setAuthor(author);
+    globalConfig.setOutputDir(outputDir);
 
     // 数据源配置
-    DataSourceConfig dataSourceConfig = new DataSourceConfig()
-        .setDbType(DbType.MYSQL)
-        .setUrl(datasource.getUrl())
-        .setDriverName("com.mysql.cj.jdbc.Driver")
-        .setUsername(datasource.getUsername())
-        .setPassword(datasource.getPassword());
+    DataSourceConfig dataSourceConfig = (new DataSourceConfig())
+            .setDbType(DbType.MYSQL)
+            .setUrl(datasource.getUrl())
+            .setDriverName(datasource.getDriverName())
+            .setUsername(datasource.getUsername())
+            .setPassword(datasource.getPassword());
 
     // 生成策略配置
     StrategyConfig strategyConfig = new StrategyConfig()
@@ -72,7 +73,7 @@ public class MpgGenerator {
 
     // package配置
     PackageConfig packageConfig = new PackageConfig()
-        .setParent(parentPath);
+            .setParent(parentPath);
 
     // 模版配置
 //    TemplateConfig templateConfig = new TemplateConfig()
@@ -83,13 +84,14 @@ public class MpgGenerator {
 //        .setXml("/templates/mapper.xml.vm")
 //        .setEntity("/templates/entity.java.vm");
 
-    ConfigBuilder configBuilder = new ConfigBuilder(
-        packageConfig, dataSourceConfig, strategyConfig, null, globalConfig);
+    ConfigBuilder configBuilder = new ConfigBuilder(packageConfig, dataSourceConfig,
+            strategyConfig, null, globalConfig);
 
     List<TableInfo> tableInfoList = configBuilder.getTableInfoList();
 
+    // 模型类后缀
     tableInfoList.forEach(
-        tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));
+            tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));
 
     // 生成器
     (new AutoGenerator()).setConfig(configBuilder).execute();
