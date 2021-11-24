@@ -5,8 +5,8 @@
   #if(${enableCache})
   <!-- 开启二级缓存 -->
   <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
-
   #end
+
   #if(${baseResultMap})
   <!-- 通用查询映射结果 -->
   <resultMap id="BaseResultMap" type="${package.Entity}.${entity}">

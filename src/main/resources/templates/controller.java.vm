@@ -18,8 +18,8 @@ import ${superControllerClassPackage};
  * </p>
  *
  * @author ${author}
- * @since ${date}
- * @see ${package.Controller}.${table.controllerName}
+ * @date ${date}
+ * @desc $!{table.comment} controller
  */
 #if(${restControllerStyle})
 @RestController

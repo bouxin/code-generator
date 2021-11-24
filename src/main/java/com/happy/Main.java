@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @see com.happy
  * @since 2019-09-29
  */
-public class MpgGenerator {
+public class Main {
 
   private static final Logger log = Logger.getAnonymousLogger();
 
@@ -45,53 +45,45 @@ public class MpgGenerator {
     generator(dataSource, author, outputDir, parentPath);
   }
 
-  private static void generator(DataSourceConfig datasource, String author,
-                                String outputDir, String parentPath) {
+  private static void generator(DataSourceConfig datasource, String author, String outputDir, String parentPath) {
     // 生成器全局配置
     GlobalConfig globalConfig = new GlobalConfig();
-
     globalConfig.setOpen(false);
     globalConfig.setBaseResultMap(true);
     globalConfig.setBaseColumnList(true);
     globalConfig.setFileOverride(true);
     globalConfig.setAuthor(author);
     globalConfig.setOutputDir(outputDir);
+    globalConfig.setActiveRecord(true);
+    globalConfig.setSwagger2(true);
+    globalConfig.setEnableCache(false);
+
 
     // 数据源配置
-    DataSourceConfig dataSourceConfig = (new DataSourceConfig())
-            .setDbType(DbType.MYSQL)
-            .setUrl(datasource.getUrl())
-            .setDriverName(datasource.getDriverName())
-            .setUsername(datasource.getUsername())
-            .setPassword(datasource.getPassword());
+    DataSourceConfig dataSourceConfig = new DataSourceConfig();
+    dataSourceConfig.setDbType(DbType.MYSQL);
+    dataSourceConfig.setUrl(datasource.getUrl());
+    dataSourceConfig.setDriverName(datasource.getDriverName());
+    dataSourceConfig.setUsername(datasource.getUsername());
+    dataSourceConfig.setPassword(datasource.getPassword());
 
     // 生成策略配置
-    StrategyConfig strategyConfig = new StrategyConfig()
-        .setNaming(NamingStrategy.underline_to_camel)
-        .setRestControllerStyle(true)
-        .setEntityBuilderModel(true);
+    StrategyConfig strategyConfig = new StrategyConfig();
+    strategyConfig.setNaming(NamingStrategy.underline_to_camel);
+    strategyConfig.setRestControllerStyle(true);
+    strategyConfig.setEntityBuilderModel(true);
+    strategyConfig.setEntityLombokModel(true);
+    strategyConfig.setSkipView(true);
 
     // package配置
-    PackageConfig packageConfig = new PackageConfig()
-            .setParent(parentPath);
+    PackageConfig packageConfig = new PackageConfig().setParent(parentPath);
 
-    // 模版配置
-//    TemplateConfig templateConfig = new TemplateConfig()
-//        .setController("/templates/controller.java.vm")
-//        .setService("/templates/service.java.vm")
-//        .setServiceImpl("/templates/serviceImpl.java.vm")
-//        .setMapper("/templates/mapper.java.vm")
-//        .setXml("/templates/mapper.xml.vm")
-//        .setEntity("/templates/entity.java.vm");
-
-    ConfigBuilder configBuilder = new ConfigBuilder(packageConfig, dataSourceConfig,
-            strategyConfig, null, globalConfig);
+    ConfigBuilder configBuilder = new ConfigBuilder(packageConfig, dataSourceConfig, strategyConfig, null, globalConfig);
 
     List<TableInfo> tableInfoList = configBuilder.getTableInfoList();
 
     // 模型类后缀
-    tableInfoList.forEach(
-            tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));
+    tableInfoList.forEach(tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));
 
     // 生成器
     (new AutoGenerator()).setConfig(configBuilder).execute();

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author ${author}
- * @since ${date}
- * @see ${package.Mapper}.${table.mapperName}
+ * @date ${date}
  */
 @Mapper
 @Repository

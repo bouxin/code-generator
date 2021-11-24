@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author ${author}
- * @since ${date}
- * @see ${package.ServiceImpl}.${table.serviceImplName}
+ * @date ${date}
  */
 @Service("${table.serviceName}")
 #if(${kotlin})
