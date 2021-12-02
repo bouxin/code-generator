@@ -1,5 +1,3 @@
-package com.happy;
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -9,23 +7,33 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
- * @author lubosson
- * @see com.happy
- * @since 2019-09-29
+ * @author luxc
+ * @date 2019-09-29
  */
 public class Main {
 
   private static final Logger log = Logger.getAnonymousLogger();
+  private static String prefix = null;
+  private static List<String> whitelist = new ArrayList<>();
 
   public static void main(String[] args) {
     Properties properties = new Properties();
     try {
       properties.load(ClassLoader.getSystemResourceAsStream("generator.properties"));
+      prefix = properties.getProperty("whitelistPattern");
+      String str = properties.getProperty("whitelist");
+      if (str != null && str.trim().length() > 0) {
+        whitelist.addAll(Arrays.asList(str.split(",")));
+      }
     } catch (Exception e) {
       log.info("config file error!");
       return;
@@ -80,7 +88,10 @@ public class Main {
 
     ConfigBuilder configBuilder = new ConfigBuilder(packageConfig, dataSourceConfig, strategyConfig, null, globalConfig);
 
-    List<TableInfo> tableInfoList = configBuilder.getTableInfoList();
+    List<TableInfo> tableInfoList = configBuilder.getTableInfoList().stream()
+            // whitelist
+            .filter(tableInfo -> tableInfo.getName().startsWith(prefix)).collect(Collectors.toList());
+    configBuilder.setTableInfoList(tableInfoList);
 
     // 模型类后缀
     tableInfoList.forEach(tableEntity -> tableEntity.setEntityName(tableEntity.getEntityName().concat("DO")));

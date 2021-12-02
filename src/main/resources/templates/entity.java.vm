@@ -1,5 +1,6 @@
 package ${package.Entity};
 
+import com.baomidou.mybatisplus.annotation.TableName;
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
 #end
@@ -18,8 +19,8 @@ import lombok.experimental.Accessors;
  * $!{table.comment}
  * </p>
  *
- * @author ${author}
- * @date ${date}
+## * @author ${author}
+## * @date ${date}
  */
 #if(${entityLombokModel})
 @Data
@@ -30,9 +31,7 @@ import lombok.experimental.Accessors;
 #end
 @Accessors(chain = true)
 #end
-#if(${table.convert})
 @TableName("${table.name}")
-#end
 #if(${swagger2})
 @ApiModel(value="${entity}对象", description="$!{table.comment}")
 #end
@@ -97,7 +96,7 @@ public class ${entity} implements Serializable {
 #end
 #if(${activeRecord})
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
     #if(${keyPropertyName})
         return this.${keyPropertyName};
     #else
